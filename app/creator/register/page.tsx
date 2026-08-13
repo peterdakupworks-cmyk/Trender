@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -30,8 +30,6 @@ export default function CreatorRegister() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
@@ -48,23 +46,6 @@ export default function CreatorRegister() {
   const [savedProfile, setSavedProfile] = useState<CreatorProfileRow | null>(null);
 
   const cities = citiesForState(state);
-
-  function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      setErrors((prev) => ({ ...prev, avatar: "Please choose an image file." }));
-      return;
-    }
-    if (file.size > MAX_AVATAR_BYTES) {
-      setErrors((prev) => ({ ...prev, avatar: "Image must be 5MB or smaller." }));
-      return;
-    }
-    setErrors((prev) => ({ ...prev, avatar: undefined }));
-    setAvatarFile(file);
-    if (avatarPreview) URL.revokeObjectURL(avatarPreview);
-    setAvatarPreview(URL.createObjectURL(file));
-  }
 
   function validate(): Errors {
     const next: Errors = {};
@@ -96,7 +77,7 @@ export default function CreatorRegister() {
       let hasSession: boolean;
 
       if (isActivating) {
-        // Adding Creator capability to an already-authenticated account —
+        // Adding Creator capability to an already-authenticated account â€”
         // same Supabase Auth identity, no new signup, no new password.
         userId = session!.user.id;
         hasSession = true;
@@ -124,7 +105,7 @@ export default function CreatorRegister() {
 
       if (!hasSession) {
         // This Supabase project requires email confirmation before a
-        // session exists — writing the creator profile now would fail RLS
+        // session exists â€” writing the creator profile now would fail RLS
         // (there's no authenticated user yet). Save the (non-secret) form
         // data so AuthProvider finishes registration automatically the
         // moment the user confirms their email and logs in.
@@ -135,35 +116,20 @@ export default function CreatorRegister() {
 
       const supabase = getSupabaseBrowserClient();
 
-      // Avatar upload is independent of the atomic registration RPC below —
-      // if it fails, we still want the rest of registration to succeed.
-      let avatarUrl: string | null = null;
-      if (avatarFile) {
-        const ext = avatarFile.name.split(".").pop() || "jpg";
-        const path = `${userId}/avatar.${ext}`;
-        const { error: uploadError } = await supabase.storage.from("avatars").upload(path, avatarFile, { upsert: true });
-        if (uploadError) {
-          setErrors({ form: "Your profile picture failed to upload — you can add one later from your profile. Continuing with the rest of registration." });
-        } else {
-          const { data } = supabase.storage.from("avatars").getPublicUrl(path);
-          avatarUrl = data.publicUrl;
-          await supabase.from("profiles").update({ profile_image_url: avatarUrl }).eq("id", userId);
-        }
-      }
 
-      // Everything else — profile fields, both required social accounts, and
-      // the creator_profiles row — happens in ONE atomic database call. See
+      // Everything else â€” profile fields, both required social accounts, and
+      // the creator_profiles row â€” happens in ONE atomic database call. See
       // supabase/migrations/0004_atomic_creator_registration.sql for why
       // this has to be atomic rather than three separate insert calls.
       const { data: creatorProfile, error: completeError } = await completeCreatorRegistration(supabase, registrationData);
 
       if (completeError || !creatorProfile) {
         setErrors({ form: completeError ?? "Couldn't complete your creator registration. Please try again." });
-        return; // Do NOT show the success screen — nothing was confirmed saved.
+        return; // Do NOT show the success screen â€” nothing was confirmed saved.
       }
 
-      // Success is shown ONLY from the row Postgres actually returned —
-      // never a hardcoded string — so the UI can't claim "pending" if the
+      // Success is shown ONLY from the row Postgres actually returned â€”
+      // never a hardcoded string â€” so the UI can't claim "pending" if the
       // database didn't really save it.
       setSavedProfile(creatorProfile);
       setSubmitted(true);
@@ -179,7 +145,7 @@ export default function CreatorRegister() {
           <span className="badge warning">CONFIRM YOUR EMAIL</span>
           <h1>Check your inbox</h1>
           <p className="muted">
-            We sent a confirmation link to <strong>{email}</strong>. Click it, then log in — Trender will finish
+            We sent a confirmation link to <strong>{email}</strong>. Click it, then log in â€” Trender will finish
             setting up your creator profile automatically as soon as you do.
           </p>
           <Link className="btn" href="/login">Go to login</Link>
@@ -213,7 +179,7 @@ export default function CreatorRegister() {
           <h1>{isActivating ? "Set up your Creator profile" : "Create creator account"}</h1>
           <p className="muted">
             {isActivating
-              ? `Continuing as ${session!.user.email}. This adds Creator access to your existing Trender account — no new login needed.`
+              ? `Continuing as ${session!.user.email}. This adds Creator access to your existing Trender account â€” no new login needed.`
               : "Connected to real Supabase authentication. Your account starts as Pending Verification."}
           </p>
 
@@ -252,16 +218,6 @@ export default function CreatorRegister() {
             </div>
           )}
 
-          <h3 style={{ marginTop: 18 }}>Profile picture</h3>
-          <div className="field">
-            <input type="file" accept="image/*" onChange={handleAvatarChange} />
-            {errors.avatar && <span className="field-error">{errors.avatar}</span>}
-            {avatarPreview && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={avatarPreview} alt="Avatar preview" style={{ marginTop: 10, width: 96, height: 96, borderRadius: "50%", objectFit: "cover", border: "1px solid var(--border)" }} />
-            )}
-          </div>
-
           <h3 style={{ marginTop: 18 }}>Location</h3>
           <div className="grid grid-2">
             <div className="field">
@@ -284,12 +240,12 @@ export default function CreatorRegister() {
 
           <h3 style={{ marginTop: 18 }}>Social accounts (both required)</h3>
           <div className="field">
-            <label>Instagram — enter your profile link</label>
+            <label>Instagram â€” enter your profile link</label>
             <input placeholder="instagram.com/yourname" value={instagram} onChange={(e) => setInstagram(e.target.value)} />
             {errors.instagram && <span className="field-error">{errors.instagram}</span>}
           </div>
           <div className="field">
-            <label>TikTok — enter your profile link</label>
+            <label>TikTok â€” enter your profile link</label>
             <input placeholder="tiktok.com/@yourname" value={tiktok} onChange={(e) => setTiktok(e.target.value)} />
             {errors.tiktok && <span className="field-error">{errors.tiktok}</span>}
           </div>
@@ -317,7 +273,7 @@ export default function CreatorRegister() {
 
           <div className="form-actions">
             <button className="btn" type="button" onClick={handleSubmit} disabled={submitting}>
-              {submitting ? "Saving…" : isActivating ? "Activate Creator profile" : "Create account"}
+              {submitting ? "Savingâ€¦" : isActivating ? "Activate Creator profile" : "Create account"}
             </button>
             <Link className="btn secondary" href={isActivating ? "/login" : "/choose-role"}>Back</Link>
           </div>
@@ -326,3 +282,4 @@ export default function CreatorRegister() {
     </main>
   );
 }
+
