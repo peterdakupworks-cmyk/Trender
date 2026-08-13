@@ -82,7 +82,7 @@ export default function Profile() {
     setSaveError("");
     try {
       const supabase = getSupabaseBrowserClient();
-      const { error } = await supabase.from("profiles").update({ full_name: displayName, username, bio }).eq("id", user.id);
+      const { error } = await supabase.from("profiles").update({ username, bio }).eq("id", user.id);
       if (error) {
         const msg = error.message.toLowerCase();
         setSaveError(msg.includes("unique") ? "That username is already taken." : `Couldn't save your profile: ${error.message}`);
@@ -139,8 +139,8 @@ export default function Profile() {
               </div>
 
               <div className="field">
-                <label>Display name</label>
-                <input value={displayName} onChange={(e) => { setDisplayName(e.target.value); setSaved(false); }} />
+                <label>Full name</label>
+                <input value={displayName} readOnly />
               </div>
 
               <div className="field">
