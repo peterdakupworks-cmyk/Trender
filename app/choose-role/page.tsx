@@ -69,7 +69,7 @@ export default function ChooseRole() {
         <div className="page-head" style={{ marginTop: 18 }}>
           <div>
             <h1>What do you want to do?</h1>
-            <p className="muted">One Trender account. Advertise your brand or apply to become a Creator.</p>
+            <p className="muted">One Trender account. Advertise or apply to become a Creator.</p>
           </div>
         </div>
 
@@ -77,7 +77,7 @@ export default function ChooseRole() {
           <div className="card card-pad">
             <span className="badge purple">📢 ADVERTISE / PROMOTE</span>
             <h3 style={{ marginTop: 10 }}>Business / Brand</h3>
-            <p className="muted">Set up the basic information needed to promote your business, brand, artist or music.</p>
+            <p className="muted">Set up the basic information needed to promote your business or brand.</p>
             {advertiser?.exists ? (
               <Link className="btn" href="/business">Open Business / Brand</Link>
             ) : (
