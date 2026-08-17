@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { AppNav } from "../../components/AppNav";
+import { campaigns, totalCreatorsRequested } from "../../lib/mock";
 import { useActiveCreatorCount } from "../../lib/supabase/activeCreators";
-import { campaignsForAdvertiserType, totalCreatorsRequested } from "../../lib/mock";
 
 export default function BusinessDashboard() {
-  const active = campaignsForAdvertiserType("business").filter((c) => c.status === "LIVE" || c.status === "IN PROGRESS" || c.status === "SUBMISSION/REVIEW");
+  const active = campaigns.filter((c) => c.status === "LIVE" || c.status === "IN PROGRESS" || c.status === "SUBMISSION/REVIEW");
   const { count, loading, error } = useActiveCreatorCount();
 
   return (
@@ -16,10 +16,10 @@ export default function BusinessDashboard() {
         <div className="container">
           <div className="page-head">
             <div>
-              <h1>Business Dashboard</h1>
-              <p className="muted">Manage your business campaigns and creator promotion activity.</p>
+              <h1>Business / Brand Dashboard</h1>
+              <p className="muted">Create and manage campaigns for music, products, services, events, or brands.</p>
             </div>
-            <Link className="btn" href="/artist/campaigns/new?type=business">Create Campaign</Link>
+            <Link className="btn" href="/business/campaigns/new">Create Campaign</Link>
           </div>
 
           <div className="grid grid-3">
@@ -43,12 +43,12 @@ export default function BusinessDashboard() {
                     <span className="badge">{c.status}</span>
                     <h3>{c.title}</h3>
                     <p className="muted">
-                      {totalCreatorsRequested(c)} creator spots · {c.targetScope === "city" ? c.targetCity : "Nigeria"} · {c.campaignType === "music" ? "Music" : "Business"}
+                      {totalCreatorsRequested(c)} creator spots · {c.targetScope === "city" ? c.targetCity : "Nigeria"} · {c.campaignType === "music" ? "Artist / Music" : "Business / Brand"}
                     </p>
                   </div>
                   <div style={{ display: "flex", gap: 8 }}>
-                    <Link className="btn secondary" href={`/artist/campaigns/${c.id}`}>Progress</Link>
-                    <Link className="btn secondary" href="/artist/analytics">Analytics</Link>
+                    <Link className="btn secondary" href={`/business/campaigns/${c.id}`}>Progress</Link>
+                    <Link className="btn secondary" href="/business/analytics">Analytics</Link>
                   </div>
                 </div>
               ))}
