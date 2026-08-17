@@ -1,18 +1,20 @@
 import Link from "next/link";
 import { Brand } from "../../components/Brand";
 
-const slides = [
-  ["Creators", "Find campaigns that match your niche and earn for approved content."],
-  ["Affordable promotion", "Artists can spread campaign budgets across many relevant creators."],
-  ["One connected platform", "Campaigns, submissions, earnings and analytics live in one place."]
-];
-
 export default function Onboarding() {
-  return <main className="center"><div style={{width:"min(820px,100%)"}}>
-    <Brand />
-    <div className="grid grid-3" style={{marginTop:30}}>
-      {slides.map(([title, text]) => <div className="card choice" key={title}><span className="badge">TRENDER</span><strong>{title}</strong><span>{text}</span></div>)}
-    </div>
-    <div style={{textAlign:"center",marginTop:24}}><Link className="btn" href="/choose-role">Continue</Link></div>
-  </div></main>;
+  return (
+    <main className="center">
+      <div style={{ width: "min(560px,100%)" }}>
+        <Brand />
+        <div className="card card-pad" style={{ marginTop: 30, textAlign: "center" }}>
+          <h1>Get started with Trender</h1>
+          <p className="muted">Create one universal Trender account or log in to your existing account.</p>
+          <div className="form-actions" style={{ justifyContent: "center", marginTop: 22 }}>
+            <Link className="btn" href="/signup">Create an Account</Link>
+            <Link className="btn secondary" href="/login">Log In</Link>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
 }
