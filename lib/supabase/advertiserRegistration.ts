@@ -21,18 +21,14 @@ export type CompleteAdvertiserRegistrationInput = {
 };
 
 /**
- * Updates the shared profile fields and upserts the advertiser_profiles row
- * for the CURRENT authenticated user. Deliberately does NOT touch
- * profiles.role — capability (Creator vs. Artist vs. Business) is
- * determined by which of creator_profiles / advertiser_profiles rows exist
- * for this user_id, not by a single role column. This also sidesteps a live
- * bug where the profiles.role-change trigger unconditionally rejects any
- * role change (see the Phase 3A audit) — that trigger is simply never
- * invoked by this flow.
+ * Saves the shared advertiser profile for the current authenticated user.
+ * The product now has only two account types: Creator and Business / Brand.
+ * Artist / Music is a campaign type, not a standalone advertiser account.
  *
- * Safe to call again for an advertiser who already has a profile — the
- * advertiser_profiles upsert updates rather than duplicates (user_id is the
- * table's primary key).
+ * `advertiser_type` is retained for backward compatibility with existing
+ * prototype data. New Business / Brand registrations are stored as business
+ * accounts; music remains available as a campaign type in the campaign
+ * builder and does not create a separate Artist account.
  */
 export async function completeAdvertiserRegistration(
   supabase: SupabaseBrowserClient,
@@ -52,21 +48,23 @@ export async function completeAdvertiserRegistration(
     return { data: null, error: "Couldn't save your profile details. Please try again." };
   }
 
+  const isLegacyMusicProfile = input.advertiserType === "music";
+
   const { data, error: advertiserError } = await supabase
     .from("advertiser_profiles")
     .upsert(
       {
         user_id: input.userId,
         advertiser_type: input.advertiserType,
-        is_artist: input.isArtist ?? input.advertiserType === "music",
-        is_business: input.isBusiness ?? input.advertiserType === "business",
+        is_artist: isLegacyMusicProfile ? true : false,
+        is_business: true,
         brand_name: input.brandName || input.name,
-        category: input.advertiserType === "business" ? input.category : "Music",
+        category: isLegacyMusicProfile ? "Music" : input.category,
         description: input.description || null,
         website_url: input.websiteUrl || null,
         logo_url: input.logoUrl || null,
         contact_info: input.contactInfo || null,
-        spotify_url: input.advertiserType === "music" ? input.spotifyUrl || null : null,
+        spotify_url: isLegacyMusicProfile ? input.spotifyUrl || null : null,
       },
       { onConflict: "user_id" }
     )
