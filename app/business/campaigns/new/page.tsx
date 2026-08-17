@@ -1,11 +1,20 @@
-import { redirect } from "next/navigation";
+"use client";
 
-/**
- * Business / Brand is the advertiser account. Artist / Music and Business /
- * Brand are campaign types inside that account. Keep the existing campaign
- * builder as the implementation for now while exposing it through the new
- * advertiser route.
- */
-export default function BusinessCampaignCreateRedirect() {
-  redirect("/artist/campaigns/new");
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import NewCampaign from "../../../artist/campaigns/new/page";
+
+function BusinessCampaignPage() {
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type") === "business" ? "business" : "music";
+
+  return <NewCampaign initialCampaignType={type} advertiserRole="business" />;
+}
+
+export default function BusinessCampaignCreate() {
+  return (
+    <Suspense fallback={<main className="center"><p className="muted">Loading…</p></main>}>
+      <BusinessCampaignPage />
+    </Suspense>
+  );
 }
