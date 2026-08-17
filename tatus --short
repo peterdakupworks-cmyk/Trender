@@ -1,0 +1,49 @@
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/artist/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/artist/register/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/choose-role/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/creator/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/creator/profile/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/creator/register/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/login/artist/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/login/business/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/login/creator/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/login/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/onboarding/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/AppNav.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'contexts/AuthProvider.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/mock.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/pendingAdvertiserRegistration.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/socialValidation.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/supabase/advertiserRegistration.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/supabase/capabilities.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/supabase/client.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'lib/supabase/creatorRegistration.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'supabase/migrations/0001_phase3a_foundation.sql', LF will be replaced by CRLF the next time Git touches it
+ app/artist/page.tsx                                |   12 [32m+[m[31m-[m
+ app/artist/register/page.tsx                       |   24 [32m+[m[31m-[m
+ app/choose-role/page.tsx                           |   80 [32m+[m[31m-[m
+ app/creator/page.tsx                               |   22 [32m+[m
+ app/creator/profile/page.tsx                       |    6 [32m+[m[31m-[m
+ app/creator/register/page.tsx                      |   85 [32m+[m[31m-[m
+ app/login/artist/page.tsx                          |  105 [32m+[m[31m-[m
+ app/login/business/page.tsx                        |  102 [32m+[m[31m-[m
+ app/login/creator/page.tsx                         |   83 [32m+[m[31m-[m
+ app/login/page.tsx                                 |  108 [32m+[m[31m-[m
+ app/onboarding/page.tsx                            |   73 [32m+[m[31m-[m
+ app/page.tsx                                       |   34 [32m+[m[31m-[m
+ components/AppNav.tsx                              |    7 [32m+[m[31m-[m
+ contexts/AuthProvider.tsx                          |    2 [32m+[m
+ lib/mock.ts                                        |    4 [32m+[m
+ lib/pendingAdvertiserRegistration.ts               |    2 [32m+[m
+ lib/socialValidation.ts                            |   26 [32m+[m[31m-[m
+ lib/supabase/advertiserRegistration.ts             |   18 [32m+[m[31m-[m
+ lib/supabase/capabilities.ts                       |   20 [32m+[m[31m-[m
+ lib/supabase/client.ts                             |   15 [32m+[m[31m-[m
+ lib/supabase/creatorRegistration.ts                |  183 [32m+++[m[31m-[m
+ lib/supabase/types.ts                              | 1033 [32m+++++++++++++++++[m[31m---[m
+ supabase/migrations/0001_phase3a_foundation.sql    |   11 [32m+[m[31m-[m
+ .../0007_fix_creator_registration_rpc.sql          |  100 [32m++[m
+ tsconfig.tsbuildinfo                               |    2 [32m+[m[31m-[m
+ 25 files changed, 1645 insertions(+), 512 deletions(-)
