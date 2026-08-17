@@ -1,20 +1,17 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
-import NewCampaign from "../../../artist/campaigns/new/page";
-
-function BusinessCampaignPage() {
-  const searchParams = useSearchParams();
-  const type = searchParams.get("type") === "business" ? "business" : "music";
-
-  return <NewCampaign initialCampaignType={type} advertiserRole="business" />;
-}
-
-export default function BusinessCampaignCreate() {
-  return (
-    <Suspense fallback={<main className="center"><p className="muted">Loading…</p></main>}>
-      <BusinessCampaignPage />
-    </Suspense>
-  );
+/**
+ * Business / Brand is the advertiser area. Artist/Music and Business/Brand
+ * remain campaign types inside the same advertiser account. The existing
+ * campaign builder already exposes both types, so route here without creating
+ * a separate Artist account or registration flow.
+ */
+export default async function BusinessCampaignCreate({
+  searchParams,
+}: {
+  searchParams?: Promise<{ type?: string }>;
+}) {
+  const params = searchParams ? await searchParams : {};
+  const type = params.type === "business" ? "business" : "music";
+  redirect(`/artist/campaigns/new?type=${type}&from=business`);
 }
