@@ -10,7 +10,6 @@ import { PasswordInput } from "../../components/PasswordInput";
 export default function Login() {
   const { signIn } = useAuth();
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,10 +27,6 @@ export default function Login() {
       setError(signInError);
       return;
     }
-    // Deliberately does NOT look at creator_profiles/advertiser_profiles or
-    // decide a destination here. Authentication and capability selection are
-    // different concerns — this route only answers "who is logged in?".
-    // Where they go next is answered by /choose-role.
     router.push("/choose-role");
   }
 
@@ -41,24 +36,21 @@ export default function Login() {
         <Brand />
         <div className="card card-pad" style={{ marginTop: 24 }}>
           <h1>Log in</h1>
-          <p className="muted">One Trender account for Creator, Artist, and Business — use the same email and password every time.</p>
-
+          <p className="muted">Use your universal Trender account to access Creator and Business / Brand features.</p>
           {error && <div className="warning-box" style={{ marginBottom: 14 }}>{error}</div>}
-
           <div className="field">
             <label>Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
           </div>
           <div className="field">
             <label>Password</label>
             <PasswordInput value={password} onChange={setPassword} autoComplete="current-password" />
           </div>
-
           <div className="form-actions">
             <button className="btn" type="button" onClick={handleSubmit} disabled={submitting}>
               {submitting ? "Logging in…" : "Log in"}
             </button>
-            <Link className="btn secondary" href="/choose-role">Create an account</Link>
+            <Link className="btn secondary" href="/signup">Create an Account</Link>
           </div>
         </div>
       </div>
