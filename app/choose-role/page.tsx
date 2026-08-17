@@ -9,7 +9,7 @@ import { getSupabaseBrowserClient } from "../../lib/supabase/client";
 import { getAdvertiserProfile } from "../../lib/supabase/capabilities";
 
 type CreatorStatus = { exists: boolean; identityStatus: string | null };
-type AdvertiserStatus = { exists: boolean; type: "music" | "business" | null };
+type AdvertiserStatus = { exists: boolean };
 
 export default function ChooseRole() {
   const { user, loading, signOut } = useAuth();
@@ -31,32 +31,31 @@ export default function ChooseRole() {
         getAdvertiserProfile(supabase, user.id),
       ]);
       setCreator({ exists: !!creatorRow, identityStatus: creatorRow?.identity_status ?? null });
-      setAdvertiser({ exists: !!advertiserRow, type: advertiserRow?.advertiser_type ?? null });
+      setAdvertiser({ exists: !!advertiserRow });
       setChecking(false);
     })();
   }, [user, loading]);
 
-  if (!loading && !user) {
+  if (loading || checking) {
+    return <main className="center"><p className="muted">Loading your account…</p></main>;
+  }
+
+  if (!user) {
     return (
       <main className="center">
-        <div style={{ width: "min(760px,100%)" }}>
+        <div style={{ width: "min(560px,100%)" }}>
           <Brand />
-          <div className="card card-pad" style={{ marginTop: 30 }}>
-            <h1>Choose your account</h1>
-            <p className="muted">Create a Trender account as a Creator or Business / Brand.</p>
-            <div className="grid grid-2" style={{ marginTop: 22 }}>
-              <Link className="choice" href="/creator/register"><strong>Creator</strong><span>Discover campaigns, create content and earn rewards.</span></Link>
-              <Link className="choice" href="/business/register"><strong>Business / Brand</strong><span>Create campaigns for music, products, services, or brands.</span></Link>
+          <div className="card card-pad" style={{ marginTop: 30, textAlign: "center" }}>
+            <h1>Welcome to Trender</h1>
+            <p className="muted">Create one universal Trender account, or log in if you already have one.</p>
+            <div className="form-actions" style={{ justifyContent: "center", marginTop: 22 }}>
+              <Link className="btn" href="/signup">Create an Account</Link>
+              <Link className="btn secondary" href="/login">Log In</Link>
             </div>
-            <p className="muted" style={{ textAlign: "center", marginTop: 18 }}>Already have an account? <Link href="/login">Log in</Link></p>
           </div>
         </div>
       </main>
     );
-  }
-
-  if (loading || checking) {
-    return <main className="center"><p className="muted">Loading your account…</p></main>;
   }
 
   return (
@@ -69,37 +68,34 @@ export default function ChooseRole() {
 
         <div className="page-head" style={{ marginTop: 18 }}>
           <div>
-            <h1>Choose your Trender capability</h1>
-            <p className="muted">One account, two ways to use Trender. You can create campaigns as a Business / Brand or earn as a Creator.</p>
+            <h1>What do you want to do?</h1>
+            <p className="muted">One Trender account. Advertise your brand or apply to become a Creator.</p>
           </div>
         </div>
 
         <div className="grid grid-2" style={{ marginTop: 10 }}>
           <div className="card card-pad">
-            <span className="badge purple">🎥 CREATOR</span>
-            <h3 style={{ marginTop: 10 }}>Creator</h3>
-            <p className="muted">Discover campaigns, create content and earn.</p>
-            {creator?.exists ? (
-              <>
-                <p className="muted" style={{ fontSize: 13 }}>Status: <strong>{creator.identityStatus ?? "pending"}</strong></p>
-                <Link className="btn" href="/creator">Creator Dashboard</Link>
-              </>
+            <span className="badge purple">📢 ADVERTISE / PROMOTE</span>
+            <h3 style={{ marginTop: 10 }}>Business / Brand</h3>
+            <p className="muted">Set up the basic information needed to promote your business, brand, artist or music.</p>
+            {advertiser?.exists ? (
+              <Link className="btn" href="/business">Open Business / Brand</Link>
             ) : (
-              <Link className="btn secondary" href="/creator/register">Apply as Creator</Link>
+              <Link className="btn" href="/business/register">Continue</Link>
             )}
           </div>
 
           <div className="card card-pad">
-            <span className="badge purple">🏢 BUSINESS / BRAND</span>
-            <h3 style={{ marginTop: 10 }}>Business / Brand</h3>
-            <p className="muted">Create campaigns for music, products, services, events, or brands.</p>
-            {advertiser?.exists ? (
+            <span className="badge purple">🎥 CREATOR</span>
+            <h3 style={{ marginTop: 10 }}>Become a Creator</h3>
+            <p className="muted">Apply with your full name, follower count, social profiles, location and content category.</p>
+            {creator?.exists ? (
               <>
-                <p className="muted" style={{ fontSize: 13 }}>Advertiser profile active{advertiser.type === "music" ? " — existing music profile" : ""}.</p>
-                <Link className="btn" href="/business">Business / Brand Dashboard</Link>
+                <p className="muted" style={{ fontSize: 13 }}>Creator application: <strong>{creator.identityStatus ?? "pending"}</strong></p>
+                <Link className="btn" href="/creator">Open Creator</Link>
               </>
             ) : (
-              <Link className="btn secondary" href="/business/register">Set up Business / Brand</Link>
+              <Link className="btn secondary" href="/creator/register">Apply as Creator</Link>
             )}
           </div>
         </div>
